@@ -1,0 +1,83 @@
+﻿@page "/document/update/{docId}"
+@inject IStringLocalizer<DocumentUpdate> localizer
+
+<EditForm Model="@request" OnValidSubmit="UpdateDocumentAsync">
+    <MudGrid>
+        <DataAnnotationsValidator />
+        <MudItem xs="12">
+            <div class="d-flex justify-center">
+                <MudText Typo="Typo.h4">@localizer["update_document"]</MudText>
+            </div>
+        </MudItem>
+        <MudItem xs="12">
+            <MudTextField For="@(() => request.Title)" @bind-Value="request.Title" Label="@localizer["doc_title"]" Variant="Variant.Outlined" />
+        </MudItem>
+        <MudItem xs="4">
+            <MudNumericField For="@(() => request.Number)" @bind-Value="request.Number" Label="@localizer["doc_num"]" Variant="Variant.Outlined" Min="0" />
+        </MudItem>
+        <MudItem xs="4">
+            <MudTextField For="@(() => request.Symbol)" @bind-Value="request.Symbol" Label="@localizer["doc_symbol"]" Variant="Variant.Outlined" />
+        </MudItem>
+        <MudItem xs="4">
+            <MudSelect T="int" For="@(() => request.DocumentTypeId)" @bind-Value="request.DocumentTypeId" Label="@localizer["doc_type"]" Variant="Variant.Outlined" AnchorOrigin="Origin.BottomCenter">
+                @foreach (var item in docTypes)
+                {
+                    <MudSelectItem T="int" Value="@(item.Id)">@(languageCode == "en" ? item.Title_en : item.Title_vi)</MudSelectItem>
+                }
+            </MudSelect>
+        </MudItem>
+        <MudItem xs="6">
+            <MudDatePicker Editable="true" @bind-Date="request.PublishedDate" DateFormat="dd/MM/yyyy" Variant="Variant.Outlined" Label="@localizer["doc_pub_date"]" />
+        </MudItem>
+        <MudItem xs="6">
+            <MudDatePicker Editable="true" @bind-Date="request.ExpirationDate" DateFormat="dd/MM/yyyy" Variant="Variant.Outlined" Label="@localizer["doc_exp_date"]" />
+        </MudItem>
+        <MudItem xs="6">
+            <MudTextField For="@(() => request.Signer)" @bind-Value="request.Signer" Label="@localizer["doc_signer"]" Variant="Variant.Outlined" />
+        </MudItem>
+        <MudItem xs="6">
+            <MudTextField For="@(() => request.IssuedDeparment)" @bind-Value="request.IssuedDeparment" Label="@localizer["doc_issued_dept"]" Variant="Variant.Outlined" />
+        </MudItem>
+        <MudItem xs="12">
+            <RichTextEditor @ref="@contentEditor" Placeholder="@localizer["doc_content"]"></RichTextEditor>
+        </MudItem>
+        <MudItem xs="12">
+            <MudFileUpload T="IReadOnlyList<IBrowserFile>" FilesChanged="UploadFiles">
+                <ButtonTemplate Context="uploadContext">
+                    <MudButton HtmlTag="label"
+                               Variant="Variant.Filled"
+                               Color="Color.Primary"
+                               StartIcon="@Icons.Material.Filled.CloudUpload"
+                               for="@uploadContext">
+                        @localizer["doc_attach"]
+                    </MudButton>
+                </ButtonTemplate>
+            </MudFileUpload>
+            @if (files != null)
+            {
+                <MudList>
+                    @foreach (var file in files)
+                    {
+                        <MudListItem Icon="@Icons.Material.Filled.AttachFile">
+                            @file.FileName
+                            <MudIconButton Icon="@Icons.Material.Filled.DeleteOutline" aria-label="delete" Color="Color.Error" OnClick="() => RemoveFile(file)"></MudIconButton>
+                        </MudListItem>
+                    }
+                </MudList>
+            }
+        </MudItem>
+        <MudItem xs="12" Class="d-flex justify-center">
+            <MudButton Disabled="@updateDocumentProcess" Variant="Variant.Filled" Color="Color.Primary" ButtonType="ButtonType.Submit" Size="Size.Large" Style="width: 100%;">
+                @if (updateDocumentProcess)
+                {
+                    <MudProgressCircular Class="ms-n1" Size="Size.Small" Indeterminate="true" />
+                    <MudText Class="ms-2">@localizer["update"]</MudText>
+                }
+                else
+                {
+                    <MudText>@localizer["update"]</MudText>
+                }
+            </MudButton>
+        </MudItem>
+    </MudGrid>
+</EditForm>

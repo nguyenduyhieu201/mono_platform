@@ -1,0 +1,35 @@
+﻿@inherits LayoutComponentBase
+@inject NavigationManager navigateManager
+@using Mono.BlazorServer.Pages.Authentication
+
+<PageTitle>Mono.BlazorServer</PageTitle>
+
+<audio id="notification" src="/media/notification.mp3" />
+
+<MudLayout>
+    <CascadingAuthenticationState>
+        <AuthorizeView>
+            <Authorized>
+                <MainBody>
+                    @Body
+                </MainBody>
+            </Authorized>
+            <NotAuthorized>
+                <RedirectToLogin />
+            </NotAuthorized>
+        </AuthorizeView>
+    </CascadingAuthenticationState>
+</MudLayout>
+
+@code {
+    private bool HasRendered { get; set; }
+
+    protected override void OnAfterRender(bool firstRender)
+    {
+        if (firstRender)
+        {
+            HasRendered = true;
+            StateHasChanged();
+        }
+    }
+}

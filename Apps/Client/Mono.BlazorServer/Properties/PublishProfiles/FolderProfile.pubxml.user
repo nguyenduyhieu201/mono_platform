@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!--
+https://go.microsoft.com/fwlink/?LinkID=208121.
+-->
+<Project>
+  <PropertyGroup>
+    <_PublishTargetUrl>D:\Projects\mono_platform\Apps\Client\Mono.BlazorServer\bin\Release\net7.0\publish\</_PublishTargetUrl>
+    <History>True|2023-01-29T08:17:12.0309556Z;True|2023-01-27T00:24:13.9557827+07:00;True|2023-01-26T23:45:30.6648103+07:00;True|2023-01-24T03:04:19.5647286+07:00;True|2023-01-22T00:40:17.7390465+07:00;True|2023-01-18T11:48:03.6452768+07:00;True|2023-01-13T16:16:38.1992758+07:00;True|2023-01-10T14:39:33.5806198+07:00;True|2023-01-09T15:54:19.3454162+07:00;</History>
+    <LastFailureDetails />
+  </PropertyGroup>
+</Project>

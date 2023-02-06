@@ -1,0 +1,55 @@
+﻿@page "/register"
+@layout Mono.BlazorServer.Shared.Layouts.NonAuthorizedLayout
+@attribute [AllowAnonymous]
+@inject ISnackbar Snackbar
+@inject IStringLocalizer<Register> localizer
+
+<EditForm Model="@registerRequest" OnValidSubmit="SubmitAsync">
+    <MudGrid>
+        <DataAnnotationsValidator />
+        <MudItem xs="12">
+            <div class="d-flex justify-center">
+                <MudText Typo="Typo.h4">@localizer["register"]</MudText>
+            </div>
+        </MudItem>
+        <MudItem xs="12">
+            <div class="d-flex justify-center">
+                <MudText>@localizer["already_have_account"] <MudLink Href="login">@localizer["signin"]</MudLink></MudText>
+            </div>
+        </MudItem>
+        <MudItem xs="12">
+            <MudTextField For="@(() => registerRequest.UserName)" @bind-Value="registerRequest.UserName" Label="@localizer["username"]" Variant="Variant.Outlined" />
+        </MudItem>
+        <MudItem xs="12" sm="6" md="6">
+            <MudTextField For="@(() => registerRequest.FirstName)" @bind-Value="registerRequest.FirstName" Label="@localizer["firstname"]" Variant="Variant.Outlined" />
+        </MudItem>
+        <MudItem xs="12" sm="6" md="6">
+            <MudTextField For="@(() => registerRequest.LastName)" @bind-Value="registerRequest.LastName" Label="@localizer["lastname"]" Variant="Variant.Outlined" />
+        </MudItem>
+        <MudItem xs="12" sm="6" md="6">
+            <MudTextField T="string" Label="@localizer["email"]" @bind-Value="registerRequest.Email" For="@(() => registerRequest.Email)" Variant="Variant.Outlined" />
+        </MudItem>
+        <MudItem xs="12" sm="6" md="6">
+            <MudTextField T="string" Label="@localizer["phonenum"]" @bind-Value="registerRequest.PhoneNumber" For="@(() => registerRequest.PhoneNumber)" Variant="Variant.Outlined" />
+        </MudItem>
+        <MudItem xs="12" sm="6" md="6">
+            <MudTextField For="@(() => registerRequest.Password)" InputType="@_passwordInput" Adornment="Adornment.End" AdornmentIcon="@_passwordInputIcon" OnAdornmentClick="TogglePasswordVisibility" @bind-Value="registerRequest.Password" Label="@localizer["password"]" Variant="Variant.Outlined" />
+        </MudItem>
+        <MudItem xs="12" sm="6" md="6">
+            <MudTextField For="@(() => registerRequest.ConfirmPassword)" InputType="InputType.Password" @bind-Value="registerRequest.ConfirmPassword" Label="@localizer["confirm_password"]" Variant="Variant.Outlined" />
+        </MudItem>
+        <MudItem xs="12" Class="d-flex justify-center">
+            <MudButton Disabled="@registerProcess" Variant="Variant.Filled" Color="Color.Primary" ButtonType="ButtonType.Submit" Size="Size.Large" Style="width: 100%;">
+                @if (registerProcess)
+                {
+                    <MudProgressCircular Class="ms-n1" Size="Size.Small" Indeterminate="true" />
+                    <MudText Class="ms-2">@localizer["register"]</MudText>
+                }
+                else
+                {
+                    <MudText>@localizer["register"]</MudText>
+                }
+            </MudButton>
+        </MudItem>
+    </MudGrid>
+</EditForm>

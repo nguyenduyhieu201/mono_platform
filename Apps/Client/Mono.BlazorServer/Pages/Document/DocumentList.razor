@@ -1,0 +1,48 @@
+﻿@page "/document"
+@using Mono.SharedLibrary.Dtos.Responses
+@inject IStringLocalizer<DocumentList> localizer
+
+@*<div class="d-flex justify-center">
+    <MudText Typo="Typo.h4" Class="mb-2">Danh sách văn bản</MudText>
+</div>*@
+
+@if (loading)
+{
+    <MudProgressCircular Color="Color.Primary" Indeterminate="true" />
+}
+else {
+    <MudTable ServerData="@(new Func<TableState, Task<TableData<DocumentItemResponse>>>(ServerReload))" Hover="true" Bordered="true" Striped="true" LoadingProgressColor="Color.Primary" @ref="table">
+        <ToolBarContent>
+            <MudText Typo="Typo.h6">@localizer["doc_list"]</MudText>
+            <MudSpacer />
+            <MudTextField T="string" ValueChanged="@(s=>OnSearch(s))" Placeholder="@localizer["search"]" Adornment="Adornment.Start"
+                      AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
+        </ToolBarContent>
+        <HeaderContent>
+            <MudTh>@localizer["doc_num_symbol"]</MudTh>
+            <MudTh>@localizer["doc_title"]</MudTh>
+            <MudTh>@localizer["doc_publish_date"]</MudTh>
+            <MudTh>@localizer["doc_issue_dept"]</MudTh>
+            <MudTh>@localizer["action"]</MudTh>
+        </HeaderContent>
+        <RowTemplate>
+            <MudTd>@((context.Number is null ? string.Empty : context.Number.ToString()) + "/" + context.Symbol ?? "")</MudTd>
+            <MudTd>@context.Title</MudTd>
+            <MudTd>@(context.PublishedDate is null ? string.Empty : context.PublishedDate.Value.ToString("dd/MM/yyyy"))</MudTd>
+            <MudTd>@context.IssuedDeparment</MudTd>
+            <MudTd>
+                <MudIconButton Size="@Size.Small" Icon="@Icons.Material.Outlined.Edit" OnClick="() => Edit(context.Guid.ToString())" />
+                <MudIconButton Size="@Size.Small" Icon="@Icons.Material.Outlined.Delete" Color="Color.Error" OnClick="() => Delete(context.Guid.ToString())" />
+            </MudTd>
+        </RowTemplate>
+        <NoRecordsContent>
+            <MudText>@localizer["no_record"]</MudText>
+        </NoRecordsContent>
+        <LoadingContent>
+            <MudText>Loading...</MudText>
+        </LoadingContent>
+        <PagerContent>
+            <MudTablePager RowsPerPageString="@localizer["row_per_page"]" />
+        </PagerContent>
+    </MudTable>
+}

@@ -1,0 +1,55 @@
+﻿@page "/login"
+@layout Mono.BlazorServer.Shared.Layouts.NonAuthorizedLayout
+@attribute [AllowAnonymous]
+@inject IStringLocalizer<Login> localizer
+
+<EditForm Model="@loginRequest" OnValidSubmit="SubmitAsync">
+    <MudGrid>
+        @*<MudItem xs="12">
+            <div class="d-flex justify-center">
+                <MudIcon Icon="@CustomIcons.BlazorHero" Color="Color.Primary" Size="Size.Large" ViewBox="0 0 500 500" Style="width: 100px; height: 100px;" />
+            </div>
+        </MudItem>*@
+        <DataAnnotationsValidator />
+        <MudItem xs="12">
+            <div class="d-flex justify-center">
+                <MudText Typo="Typo.h4">@localizer["signin"]</MudText>
+            </div>
+        </MudItem>
+        @*<MudItem xs="12">
+            <div class="d-flex justify-center">
+                <MudText>Description</MudText>
+            </div>
+        </MudItem>*@
+        <MudItem xs="12">
+            <div class="d-flex justify-center">
+                <MudText>@localizer["dont_have_account"] <MudLink Href="/register">@localizer["register_here"]</MudLink></MudText>
+            </div>
+        </MudItem>
+        <MudItem xs="12">
+            <MudTextField T="string" Label="@localizer["username"]" Variant="Variant.Outlined"
+                          @bind-Value="loginRequest.UserName" For="@(() => loginRequest.UserName)" />
+        </MudItem>
+        <MudItem xs="12">
+            <MudTextField Label="@localizer["password"]" Variant="Variant.Outlined"
+                          @bind-Value="loginRequest.Password" For="@(() => loginRequest.Password)"
+                          InputType="@_passwordInput" Adornment="Adornment.End" AdornmentIcon="@_passwordInputIcon" OnAdornmentClick="TogglePasswordVisibility" />
+        </MudItem>
+        <MudItem xs="12" Class="d-flex justify-space-between align-center">
+            <MudLink Href="/account/forgot-password">@localizer["forgot_password"]</MudLink>
+        </MudItem>
+        <MudItem xs="12" Class="d-flex justify-center">
+            <MudButton Disabled="@loginProcess" Variant="Variant.Filled" Color="Color.Primary" ButtonType="ButtonType.Submit" Size="Size.Large" Style="width: 100%;">
+                @if (loginProcess)
+                {
+                    <MudProgressCircular Class="ms-n1" Size="Size.Small" Indeterminate="true" />
+                    <MudText Class="ms-2">@localizer["signin"]</MudText>
+                }
+                else
+                {
+                    <MudText>@localizer["signin"]</MudText>
+                }
+            </MudButton>
+        </MudItem>
+    </MudGrid>
+</EditForm>

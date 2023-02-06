@@ -1,0 +1,83 @@
+﻿@page "/profile"
+
+<MudGrid>
+    <MudItem xs="12" sm="4" md="3">
+        <MudCard Elevation="25">
+            <MudCardContent>
+                <div class="d-flex justify-center mb-4">
+                    @if (!string.IsNullOrEmpty(@ImageDataUrl))
+                    {
+                        <MudAvatar Image="@ImageDataUrl" Style="height:250px; width:250px;"> </MudAvatar>
+                    }
+                    else
+                    {
+                        <MudAvatar Color="Color.Secondary" Style="height:250px; width:250px;font-size:50px !important">@fullNameInAcronym</MudAvatar>
+                    }
+                </div>
+                <MudText Typo="Typo.h6" Align="Align.Center">@updateRequest.FirstName @updateRequest.LastName</MudText>
+                <MudText Align="Align.Center">@updateRequest.Email</MudText>
+            </MudCardContent>
+            <MudCardActions Class="d-flex justify-center">
+                <InputFile id="fileInput" OnChange="UploadFile" hidden />
+                <MudButton HtmlTag="label"
+                           Variant="Variant.Text"
+                           Color="Color.Primary"
+                           Size="Size.Small"
+                           StartIcon="@Icons.Filled.CloudUpload"
+                           for="fileInput">
+                    Upload Image
+                </MudButton>
+                @if (!string.IsNullOrEmpty(@ImageDataUrl))
+                {
+                    <MudButton Variant="Variant.Text"
+                           Color="Color.Error"
+                           StartIcon="@Icons.Filled.Delete"
+                           Size="Size.Small"
+                           OnClick="DeleteFile">
+                        Delete Image
+                    </MudButton>
+                }
+            </MudCardActions>
+        </MudCard>
+    </MudItem>
+    <MudItem xs="12" sm="8" md="9">
+        <EditForm Model="@updateRequest" OnValidSubmit="UpdateProfileAsync">
+            <MudCard Elevation="25">
+                <MudCardHeader>
+                    <CardHeaderContent>
+                        <MudText>Profile Details</MudText>
+                    </CardHeaderContent>
+                </MudCardHeader>
+                <MudCardContent>
+                    <MudGrid>
+                        <MudItem xs="12" md="6">
+                            <MudTextField @bind-Value="@updateRequest.FirstName" For="@(() => updateRequest.FirstName)" Label="First Name" Variant="Variant.Outlined" />
+                        </MudItem>
+                        <MudItem xs="12" md="6">
+                            <MudTextField @bind-Value="@updateRequest.LastName" For="@(() => updateRequest.LastName)" Label="Last Name" Variant="Variant.Outlined" />
+                        </MudItem>
+                        <MudItem xs="12" md="6">
+                            <MudTextField @bind-Value="@updateRequest.PhoneNumber" For="@(() => updateRequest.PhoneNumber)" Label="Phone Number" Variant="Variant.Outlined" />
+                        </MudItem>
+                        <MudItem xs="12" md="6">
+                            <MudTextField @bind-Value="@updateRequest.Email" Label="Email" For="@(() => updateRequest.Email)" Variant="Variant.Outlined" InputType="InputType.Email" Disabled=true />
+                        </MudItem>
+                    </MudGrid>
+                </MudCardContent>
+                <MudCardActions Class="pb-4 pl-4">
+                    <MudButton Disabled="@updateProfileProcess" Variant="Variant.Filled" Color="Color.Primary" ButtonType="ButtonType.Submit" Class="ml-auto">
+                        @if (updateProfileProcess)
+                        {
+                            <MudProgressCircular Class="ms-n1" Size="Size.Small" Indeterminate="true" />
+                            <MudText Class="ms-2">Save Changes</MudText>
+                        }
+                        else
+                        {
+                            <MudText>Save Changes</MudText>
+                        }
+                    </MudButton>
+                </MudCardActions>
+            </MudCard>
+        </EditForm>
+    </MudItem>
+</MudGrid>
